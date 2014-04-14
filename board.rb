@@ -35,12 +35,12 @@ class Board
           if tile.bomb_count
             colorize_bomb_count("#{tile.bomb_count}")
           elsif tile.bomb?
-            "\u2736".encode('utf-8').colorize(:color => :red).bold.blink
+            "\u2736".encode('utf-8').colorize(:color => :red).blink
           else
             " "
           end
         elsif tile.flagged?
-          "\u2691".encode('utf-8').red
+          "\u2691".encode('utf-8').red 
         elsif
           tile.bomb? && !tile.revealed?
           "\u25A0".encode('utf-8').light_white
