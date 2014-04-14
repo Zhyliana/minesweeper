@@ -16,7 +16,7 @@ class Game
     until game_over?
       player_action
     end
-    player_win
+    player_won
   end
   
   def load_saved_game
@@ -42,7 +42,7 @@ class Game
     save_file
   end
   
-  def player_win
+  def player_won
     system('clear')
     display_grid
     puts "You go, girl!".magenta.blink
@@ -77,14 +77,20 @@ class Game
     tile.reveal unless tile.flagged?
 
     if tile.bomb?
-      system('clear')
-      tile.reveal
-      board.display_inspect
-      File.delete('game.yaml') if File.exist?('game.yaml')
-      abort("Game over, loser.".red)
+      player_lost(pos)
     end
 
     reveal_neighbors(pos)
+  end
+  
+  def player_lost(pos)
+    x, y = pos
+    
+    system('clear')
+    board.grid[x][y].reveal
+    board.display_inspect
+    File.delete('game.yaml') if File.exist?('game.yaml')
+    abort("Game over, loser.".red)
   end
 
   def reveal_neighbors(pos)
