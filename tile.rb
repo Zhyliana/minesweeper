@@ -1,6 +1,6 @@
 class Tile
   attr_accessor :bomb_count
-  attr_reader :flagged, :revealed, :bomb
+  attr_accessor :flagged, :revealed, :bomb
 
   def initalize
     @bomb = false

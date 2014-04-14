@@ -1,6 +1,9 @@
 require 'yaml'
 require './board.rb'
 require './tile.rb'
+require 'ostruct'
+require 'colorize'
+require "highline/system_extensions"
 
 class Game
   attr_reader :board
@@ -11,7 +14,6 @@ class Game
 
   def play
     if File.exist?('game.yaml')
-      system('clear')
       puts "Would you like to continue your saved game?"
       new_game = gets.upcase.chomp
       load_file if new_game == "Y"

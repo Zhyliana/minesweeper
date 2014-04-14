@@ -43,9 +43,9 @@ class Board
           "\u2691".encode('utf-8').red 
         elsif
           tile.bomb? && !tile.revealed?
-          "\u25A0".encode('utf-8').light_white
+          "\u2588".encode('utf-8').light_white
         else
-          "\u25A0".encode('utf-8').light_white
+          "\u2588".encode('utf-8').light_white
         end
       end.join(" ")
 
