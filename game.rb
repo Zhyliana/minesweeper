@@ -1,9 +1,8 @@
 require 'yaml'
-require './board.rb'
+require_relative 'board'
 require './tile.rb'
-require 'ostruct'
 require 'colorize'
-require "highline/system_extensions"
+
 
 class Game
   attr_reader :board

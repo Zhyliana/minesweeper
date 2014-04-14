@@ -1,10 +1,11 @@
+# require 'game'
 require 'colorize'
 
 class Board
   attr_reader :grid, :grid_size
 
   DELTA = [[0, 1], [0, -1], [1, 0], [-1, 0],
-          [-1, 1], [-1, -1], [1, -1], [1, 1]]
+  [-1, 1], [-1, -1], [1, -1], [1, 1]]
 
   def initialize(grid_size = 9)
     @grid_size = grid_size
@@ -31,21 +32,20 @@ class Board
   def display_inspect
     grid.each_with_index do |row, idx|
       inspect_row = row.map do |tile|
-        if tile.revealed?
+        if tile.revealed? 
           if tile.bomb_count
             colorize_bomb_count("#{tile.bomb_count}")
           elsif tile.bomb?
-            "\u2736".encode('utf-8').colorize(:color => :red).blink
+            "\u2736".encode('utf-8').colorize(:color => :red).bold.blink
           else
             " "
           end
         elsif tile.flagged?
-          "\u2691".encode('utf-8').red 
-        elsif
-          tile.bomb? && !tile.revealed?
-          "\u2588".encode('utf-8').light_white
+          "\u2691".encode('utf-8').red
+        # elsif tile.bomb? && !tile.revealed?
+  #         "\u25A0".encode('utf-8').light_white
         else
-          "\u2588".encode('utf-8').light_white
+          "\u25A0".encode('utf-8').light_white
         end
       end.join(" ")
 
@@ -54,6 +54,7 @@ class Board
 
     puts "  0 1 2 3 4 5 6 7 8".light_white
   end
+
 
   def populate_grid
     populate_bombs
