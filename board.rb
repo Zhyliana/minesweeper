@@ -13,49 +13,6 @@ class Board
     populate_grid
   end
 
-
-  def colorize_bomb_count(bomb_count)
-    case bomb_count
-    when "1"
-      bomb_count.colorize(:yellow)
-    when "2"
-      bomb_count.colorize(:light_green)
-    when "3"
-      bomb_count.colorize(:light_cyan)
-    when "4"
-      bomb_count.colorize(:blue).bold
-    else
-      bomb_count.colorize(:red).bold
-    end
-  end
-
-  def display_inspect
-    grid.each_with_index do |row, idx|
-      inspect_row = row.map do |tile|
-        if tile.revealed? 
-          if tile.bomb_count
-            colorize_bomb_count("#{tile.bomb_count}")
-          elsif tile.bomb?
-            "\u2736".encode('utf-8').colorize(:color => :red).bold.blink
-          else
-            " "
-          end
-        elsif tile.flagged?
-          "\u2691".encode('utf-8').red
-        # elsif tile.bomb? && !tile.revealed?
-  #         "\u25A0".encode('utf-8').light_white
-        else
-          "\u25A0".encode('utf-8').light_white
-        end
-      end.join(" ")
-
-      puts "#{idx}".light_white + " #{inspect_row}"
-    end
-
-    puts "  0 1 2 3 4 5 6 7 8".light_white
-  end
-
-
   def populate_grid
     populate_bombs
 
@@ -108,10 +65,6 @@ class Board
     bomb_list
   end
 
-  def bomb_free_tiles
-    grid.flatten.reject {|tile| tile.bomb?}
-  end
-
   def flagged_positions
     flagged_list = []
 
@@ -123,17 +76,65 @@ class Board
 
     flagged_list
   end
-
+  
+  def bomb_free_tiles
+    grid.flatten.reject {|tile| tile.bomb?}
+  end
+  
   def neighbors(pos)
     x, y = pos
     neighbors = []
 
     DELTA.each do |d_x, d_y|
       new_x, new_y = (x + d_x), (y + d_y)
-      next unless new_x.between?(0, grid_size-1) && new_y.between?(0, grid_size-1)
+      next unless new_x.between?(0, grid_size - 1) && new_y.between?(0, grid_size - 1)
       neighbors << [new_x, new_y]
     end
 
     neighbors
+  end
+  
+  def display_inspect
+    grid.each_with_index do |row, idx|
+      inspect_row = row.map do |tile|
+        if tile.revealed? 
+          
+          if tile.bomb_count
+            colorize_bomb_count("#{tile.bomb_count}")
+          elsif tile.bomb?
+            "\u2736".encode('utf-8').colorize(:color => :red).bold.blink
+          else
+            " "
+          end
+          
+        elsif tile.flagged?
+          "\u2691".encode('utf-8').red
+        # elsif tile.bomb? && !tile.revealed?
+           #"\u25A0".encode('utf-8').light_white
+        else
+          "\u25A0".encode('utf-8').light_white
+        end
+      end.join(" ")
+
+      puts "#{idx}".light_white + " #{inspect_row}"
+    end
+
+    puts "  0 1 2 3 4 5 6 7 8".light_white
+  end
+  
+  
+  def colorize_bomb_count(bomb_count)
+    case bomb_count
+    when "1"
+      bomb_count.colorize(:yellow)
+    when "2"
+      bomb_count.colorize(:light_green)
+    when "3"
+      bomb_count.colorize(:light_cyan)
+    when "4"
+      bomb_count.colorize(:blue).bold
+    else
+      bomb_count.colorize(:red).bold
+    end
   end
 end

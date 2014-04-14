@@ -10,24 +10,39 @@ class Game
   def initialize
     @board = Board.new
   end
-
+  
   def play
+    load_saved_game
+    until game_over?
+      player_action
+    end
+    player_win
+  end
+  
+  def load_saved_game
     if File.exist?('game.yaml')
       puts "Would you like to continue your saved game?"
       new_game = gets.upcase.chomp
       load_file if new_game == "Y"
     end
+  end
+  
+  def load_file
+   game = YAML.load_file('game.yaml')
+   @board = game.board
+  end
+  
+  def player_action
+    display_grid
+    position, action = prompt_user
 
-    until game_over?
-      display_grid
-      position, action = prompt_user
+    reveal_tile(position) if action == "R"
+    flag_tile(position) if action == "F"
 
-      reveal_tile(position) if action == "R"
-      flag_tile(position) if action == "F"
-
-      save_file
-    end
-
+    save_file
+  end
+  
+  def player_win
     system('clear')
     display_grid
     puts "You go, girl!".magenta.blink
@@ -38,11 +53,6 @@ class Game
     system('clear')
     @board.display_inspect
     puts
-  end
-
-  def load_file
-   game = YAML.load_file('game.yaml')
-   @board = game.board
   end
 
   def save_file
@@ -94,16 +104,15 @@ class Game
 
   def flag_tile(pos)
     x, y = pos
-
     board.grid[x][y].set_flag
   end
 
 
   def game_over?
     (board.flagged_positions.sort == board.bomb_positions.sort &&
-    board.bomb_free_tiles.all?(&:revealed?)) ||
+      board.bomb_free_tiles.all?(&:revealed?)) ||
     (board.bomb_free_tiles.all?(&:revealed?) &&
-    board.bomb_free_tiles.none?(&:flagged?))
+      board.bomb_free_tiles.none?(&:flagged?))
   end
 end
 
